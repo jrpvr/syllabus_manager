@@ -1,5 +1,3 @@
-# app.py
-
 import os
 import uuid
 import math
@@ -10,6 +8,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 app = Flask(__name__)
 app.secret_key = 'secretkey'
+
 UPLOAD_FOLDER = 'static/uploads'
 ALLOWED_EXTENSIONS = {'pdf'}
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
@@ -205,6 +204,5 @@ def save_pdf_file(pdf_file):
     pdf_file.save(filepath)
     return unique_filename
 
-if __name__ == '__main__':
-    initialize_database()
-    app.run(debug=True)
+# This will run both locally and on Render (under gunicorn)
+initialize_database()
