@@ -46,7 +46,7 @@ def initialize_database():
     admin = conn.execute('SELECT * FROM users WHERE username = ?', ('admin',)).fetchone()
     if not admin:
         conn.execute('INSERT INTO users (username, password, role) VALUES (?, ?, ?)', 
-                     ('admin', generate_password_hash('admin123'), 'admin'))
+                     ('pratham', generate_password_hash('pvrathod003'), 'admin'))
     conn.commit()
     conn.close()
 
