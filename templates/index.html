@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>SUK Syllabus | Course Manager</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      padding-top: 90px;
+      color: #212529;
+      background: transparent;
+      overflow-x: hidden;
+    }
+
+    #bg-video {
+      position: fixed;
+      top: 0;
+      left: 0;
+      min-width: 100vw;
+      min-height: 100vh;
+      object-fit: cover;
+      z-index: -1;
+      filter: brightness(0.3);
+    }
+
+    .navbar-custom {
+      background: rgba(33, 33, 33, 0.95);
+      backdrop-filter: blur(10px);
+    }
+
+    .navbar-custom .navbar-brand,
+    .navbar-custom .nav-link,
+    .navbar-custom .navbar-text {
+      color: #f8f9fa;
+    }
+
+    .dark-mode {
+      background: #0e0e0e;
+      color: #eee;
+    }
+
+    .dark-mode .course-card {
+      background: rgba(40, 40, 40, 0.92);
+      border: 1px solid #444;
+    }
+
+    .dark-mode .tag {
+      background: #ff6f61;
+    }
+
+    .dark-mode .navbar-custom {
+      background-color: #1a1a1a !important;
+    }
+
+    .dark-mode .dark-toggle {
+      background: #2c2c2c !important;
+      color: #f5f5f5 !important;
+    }
+
+    .course-card {
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(14px);
+      border: 1px solid #e3e3e3;
+      border-radius: 16px;
+      padding: 1.8rem;
+      box-shadow: 0 12px 32px rgba(0,0,0,0.1);
+      transition: all 0.3s ease-in-out;
+    }
+
+    .course-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 18px 36px rgba(0, 0, 0, 0.15);
+    }
+
+    .tag {
+      background: #6c63ff;
+      color: #fff;
+      padding: 6px 14px;
+      font-size: 0.75rem;
+      font-weight: 500;
+      border-radius: 20px;
+      margin: 3px 4px 2px 0;
+      display: inline-block;
+    }
+
+    .search-bar input {
+      border-radius: 30px;
+      padding: 0.8rem 1.5rem;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.05);
+      border: 1px solid #ccc;
+    }
+
+    .filter-bar {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .filter-bar .btn {
+      border-radius: 20px;
+      margin: 0.3rem;
+      font-size: 0.85rem;
+      transition: all 0.2s ease-in-out;
+    }
+
+    .filter-bar .btn:hover {
+      background-color: #6c63ff;
+      color: #fff;
+    }
+
+    .floating-btn {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      background-color: #6c63ff;
+      color: white;
+      padding: 16px 18px;
+      border-radius: 50%;
+      font-size: 1.4rem;
+      box-shadow: 0 8px 18px rgba(0,0,0,0.25);
+      transition: background 0.3s ease;
+      z-index: 1000;
+    }
+
+    .floating-btn:hover {
+      background-color: #4f48c4;
+    }
+
+    .dark-toggle {
+      position: fixed;
+      top: 90px;
+      right: 20px;
+      background: #ffffffee;
+      border: none;
+      border-radius: 30px;
+      padding: 10px 16px;
+      font-size: 1rem;
+      color: #333;
+      z-index: 1100;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 4rem 1rem;
+      color: #ddd;
+    }
+
+    .empty-state i {
+      color: #adb5bd;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 🔥 Background Video -->
+  <video autoplay muted loop id="bg-video">
+    <source src="{{ url_for('static', filename='videos/4440117-hd_1920_1080_25fps.mp4') }}" type="video/mp4">
+    Your browser does not support the video tag.
+  </video>
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark navbar-custom fixed-top shadow-sm">
+    <div class="container-fluid px-4">
+      <a class="navbar-brand" href="{{ url_for('home') }}">📘 SUK Syllabus</a>
+      <div class="d-flex align-items-center">
+        {% if session.get('username') %}
+          <span class="navbar-text me-3">👤 {{ session['username'] }} ({{ session['role'] }})</span>
+          <a href="{{ url_for('logout') }}" class="btn btn-sm btn-outline-light">Logout</a>
+        {% else %}
+          <a href="{{ url_for('login') }}" class="btn btn-sm btn-outline-light">Login</a>
+        {% endif %}
+      </div>
+    </div>
+  </nav>
+
+  <!-- Dark Mode Toggle -->
+  <button class="dark-toggle" onclick="toggleDarkMode()" title="Toggle Dark Mode">
+    <i class="fas fa-moon" id="theme-icon"></i>
+  </button>
+
+  <div class="container">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="alert alert-{{ category }} alert-dismissible fade show mt-4" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    <form class="search-bar my-4">
+      <input type="search" id="searchInput" class="form-control form-control-lg" placeholder="🔍 Search courses..." />
+    </form>
+
+    <div class="filter-bar">
+      {% set all_topics = [] %}
+      {% for course in courses %}
+        {% if course.topics %}
+          {% for t in course.topics.split(',') %}
+            {% set _ = all_topics.append(t.strip()) %}
+          {% endfor %}
+        {% endif %}
+      {% endfor %}
+      {% for topic in all_topics|unique %}
+        <button class="btn btn-outline-primary btn-sm">{{ topic }}</button>
+      {% endfor %}
+    </div>
+
+    {% if courses %}
+      <div class="row g-4" id="courseList">
+        {% for course in courses %}
+          <div class="col-md-6 col-lg-4 course-entry">
+            <div class="course-card h-100">
+              <h4>{{ course.course_name }}</h4>
+              <p><strong>Instructor:</strong> {{ course.instructor or 'N/A' }}</p>
+              <p><strong>Semester:</strong> {{ course.semester or 'N/A' }}</p>
+              <p><strong>Credits:</strong> {{ course.credits or 'N/A' }}</p>
+              {% if course.topics %}
+                {% for tag in course.topics.split(',') %}
+                  <span class="tag">{{ tag.strip() }}</span>
+                {% endfor %}
+              {% endif %}
+              <div class="d-flex justify-content-between align-items-center mt-3">
+                {% if course.pdf_filename %}
+                  <a href="{{ url_for('uploaded_file', filename=course.pdf_filename) }}" target="_blank" class="btn btn-outline-secondary btn-sm">
+                    <i class="fas fa-file-pdf"></i> View PDF
+                  </a>
+                {% else %}
+                  <span class="text-muted small">No PDF</span>
+                {% endif %}
+                <div>
+                  <a href="{{ url_for('edit', id=course.id) }}" class="btn btn-outline-warning btn-sm"><i class="fas fa-edit"></i></a>
+                  {% if session.get('role') == 'admin' %}
+                    <a href="#" onclick="confirmDelete({{ course.id }})" class="btn btn-outline-danger btn-sm"><i class="fas fa-trash"></i></a>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <div class="empty-state">
+        <i class="fas fa-folder-open fa-3x mb-3"></i>
+        <p>No courses available yet.</p>
+      </div>
+    {% endif %}
+
+    {% if session.get('username') %}
+      <a href="{{ url_for('add') }}" class="floating-btn" title="Add Course">
+        <i class="fas fa-plus"></i>
+      </a>
+    {% endif %}
+  </div>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script>
+    function confirmDelete(id) {
+      Swal.fire({
+        title: 'Are you sure?',
+        text: "This will delete the course.",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#dc3545',
+        cancelButtonColor: '#6c757d',
+        confirmButtonText: 'Yes, delete it!',
+      }).then((result) => {
+        if (result.isConfirmed) {
+          window.location.href = `/delete/${id}`;
+        }
+      });
+    }
+
+    function toggleDarkMode() {
+      document.body.classList.toggle('dark-mode');
+      const icon = document.getElementById('theme-icon');
+      const isDark = document.body.classList.contains('dark-mode');
+      icon.className = isDark ? 'fas fa-sun' : 'fas fa-moon';
+      localStorage.setItem('theme', isDark ? 'dark' : 'light');
+    }
+
+    window.onload = () => {
+      if (localStorage.getItem('theme') === 'dark') {
+        document.body.classList.add('dark-mode');
+        document.getElementById('theme-icon').className = 'fas fa-sun';
+      }
+    };
+
+    document.getElementById('searchInput').addEventListener('input', function () {
+      const keyword = this.value.toLowerCase();
+      document.querySelectorAll('.course-entry').forEach(card => {
+        const title = card.querySelector('h4').textContent.toLowerCase();
+        const tags = card.textContent.toLowerCase();
+        card.style.display = title.includes(keyword) || tags.includes(keyword) ? 'block' : 'none';
+      });
+    });
+  </script>
+</body>
+</html>

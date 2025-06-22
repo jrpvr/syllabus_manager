@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Add Course | SUK Syllabus</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(-45deg, #cfdef3, #e0c3fc, #a18cd1, #fbc2eb);
+      background-size: 400% 400%;
+      animation: animatedGradient 15s ease infinite;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #212529;
+    }
+
+    @keyframes animatedGradient {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .glass-card {
+      background: rgba(255, 255, 255, 0.88);
+      backdrop-filter: blur(16px);
+      border-radius: 20px;
+      box-shadow: 0 16px 38px rgba(0, 0, 0, 0.1);
+      padding: 2.5rem;
+      width: 100%;
+      max-width: 720px;
+      animation: fadeIn 1.2s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .title-section {
+      text-align: center;
+      margin-bottom: 2.5rem;
+    }
+
+    .title-section h2 {
+      font-weight: 700;
+      font-size: 2.2rem;
+    }
+
+    .title-section p {
+      color: #6c757d;
+      font-size: 1rem;
+    }
+
+    .form-label {
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .form-control {
+      border-radius: 12px;
+      padding: 0.75rem 1rem;
+      border: 1px solid #ccc;
+      transition: all 0.3s ease;
+    }
+
+    .form-control:focus {
+      border-color: #7f53ac;
+      box-shadow: 0 0 0 0.2rem rgba(127, 83, 172, 0.25);
+    }
+
+    .btn {
+      border-radius: 12px;
+      padding: 0.6rem 1.4rem;
+      font-weight: 600;
+      transition: all 0.3s ease-in-out;
+    }
+
+    .btn-success {
+      background-color: #7f53ac;
+      border: none;
+    }
+
+    .btn-success:hover {
+      background-color: #5e3b90;
+    }
+
+    .btn-outline-secondary:hover {
+      background-color: #e2e6ea;
+      color: #212529;
+    }
+
+    .btn i {
+      margin-right: 6px;
+    }
+
+    @media (max-width: 576px) {
+      .glass-card {
+        padding: 2rem 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="glass-card">
+    <div class="title-section">
+      <h2>📘 Add New Course</h2>
+      <p>Fill in the course details to grow your digital syllabus library.</p>
+    </div>
+
+    <form action="{{ url_for('add') }}" method="POST" enctype="multipart/form-data">
+      <div class="mb-3">
+        <label class="form-label">Course Name</label>
+        <input type="text" name="course_name" class="form-control" required>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Instructor</label>
+        <input type="text" name="instructor" class="form-control">
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Semester</label>
+        <input type="text" name="semester" class="form-control">
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Credits</label>
+        <input type="number" name="credits" class="form-control">
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Topics (comma-separated)</label>
+        <textarea name="topics" class="form-control" rows="3"></textarea>
+      </div>
+      <div class="mb-4">
+        <label class="form-label">Upload Syllabus PDF</label>
+        <input type="file" name="pdf_file" class="form-control" accept=".pdf">
+      </div>
+
+      <div class="d-flex justify-content-between">
+        <button type="submit" class="btn btn-success">
+          <i class="fas fa-plus-circle"></i> Add Course
+        </button>
+        <a href="{{ url_for('index') }}" class="btn btn-outline-secondary">
+          <i class="fas fa-arrow-left"></i> Cancel
+        </a>
+      </div>
+    </form>
+  </div>
+
+</body>
+</html>
+
