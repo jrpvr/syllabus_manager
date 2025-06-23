@@ -16,6 +16,9 @@ ALLOWED_EXTENSIONS = {'pdf'}
 
 DB_FILE = 'syllabus.db'
 
+def dict_factory(cursor, row):
+    return {col[0]: row[idx] for idx, col in enumerate(cursor.description)}
+
 def init_db():
     conn = sqlite3.connect(DB_FILE)
     c = conn.cursor()
@@ -38,6 +41,7 @@ def init_db():
             pdf_filename TEXT
         )
     ''')
+    # Default admin account
     c.execute('SELECT * FROM users WHERE username = ?', ('pratham',))
     if not c.fetchone():
         c.execute('INSERT INTO users (username, password, role) VALUES (?, ?, ?)', (
@@ -49,7 +53,9 @@ def init_db():
     conn.close()
 
 def get_db():
-    return sqlite3.connect(DB_FILE)
+    conn = sqlite3.connect(DB_FILE)
+    conn.row_factory = dict_factory  # Enable dictionary-style row access
+    return conn
 
 def is_logged_in():
     return 'user_id' in session
@@ -79,8 +85,8 @@ def index():
 
     conn = get_db()
     c = conn.cursor()
-    c.execute('SELECT COUNT(*) FROM syllabus')
-    total_courses = c.fetchone()[0]
+    c.execute('SELECT COUNT(*) as count FROM syllabus')
+    total_courses = c.fetchone()['count']
     total_pages = math.ceil(total_courses / per_page)
 
     c.execute('SELECT * FROM syllabus LIMIT ? OFFSET ?', (per_page, offset))
@@ -101,10 +107,10 @@ def login():
         user = c.fetchone()
         conn.close()
 
-        if user and check_password_hash(user[2], password):
-            session['user_id'] = user[0]
-            session['username'] = user[1]
-            session['role'] = user[3]
+        if user and check_password_hash(user['password'], password):
+            session['user_id'] = user['id']
+            session['username'] = user['username']
+            session['role'] = user['role']
             flash('Logged in successfully!', 'success')
             return redirect(url_for('index'))
 
@@ -172,7 +178,7 @@ def edit(id):
         topics = request.form.get('topics')
         pdf_file = request.files.get('pdf_file')
 
-        filename = course[6]
+        filename = course['pdf_filename']
         if pdf_file and allowed_file(pdf_file.filename):
             if filename:
                 old_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
@@ -206,8 +212,8 @@ def delete(id):
     result = c.fetchone()
 
     if result:
-        if result[0]:
-            file_path = os.path.join(app.config['UPLOAD_FOLDER'], result[0])
+        if result['pdf_filename']:
+            file_path = os.path.join(app.config['UPLOAD_FOLDER'], result['pdf_filename'])
             if os.path.exists(file_path):
                 os.remove(file_path)
 
