@@ -118,7 +118,7 @@
     <form action="{{ url_for('add') }}" method="POST" enctype="multipart/form-data">
       <div class="mb-3">
         <label class="form-label">Course Name</label>
-        <input type="text" name="course_name" class="form-control" required>
+        <input type="text" name="course_name" class="form-control" required autofocus>
       </div>
       <div class="mb-3">
         <label class="form-label">Instructor</label>
@@ -130,11 +130,11 @@
       </div>
       <div class="mb-3">
         <label class="form-label">Credits</label>
-        <input type="number" name="credits" class="form-control">
+        <input type="number" name="credits" class="form-control" min="0" step="1">
       </div>
       <div class="mb-3">
         <label class="form-label">Topics (comma-separated)</label>
-        <textarea name="topics" class="form-control" rows="3"></textarea>
+        <textarea name="topics" class="form-control" rows="3" placeholder="e.g., Unit 1, Unit 2, Final Project"></textarea>
       </div>
       <div class="mb-4">
         <label class="form-label">Upload Syllabus PDF</label>
@@ -154,4 +154,3 @@
 
 </body>
 </html>
-
