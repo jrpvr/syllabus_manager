@@ -8,10 +8,7 @@
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
   <style>
-    * {
-      box-sizing: border-box;
-    }
-
+    * { box-sizing: border-box; }
     body {
       font-family: 'Poppins', sans-serif;
       margin: 0;
@@ -20,7 +17,6 @@
       background: transparent;
       overflow-x: hidden;
     }
-
     #bg-video {
       position: fixed;
       top: 0;
@@ -31,41 +27,29 @@
       z-index: -1;
       filter: brightness(0.3);
     }
-
     .navbar-custom {
       background: rgba(33, 33, 33, 0.95);
       backdrop-filter: blur(10px);
     }
-
     .navbar-custom .navbar-brand,
     .navbar-custom .nav-link,
     .navbar-custom .navbar-text {
       color: #f8f9fa;
     }
-
     .dark-mode {
       background: #0e0e0e;
       color: #eee;
     }
-
     .dark-mode .course-card {
       background: rgba(40, 40, 40, 0.92);
       border: 1px solid #444;
     }
-
-    .dark-mode .tag {
-      background: #ff6f61;
-    }
-
-    .dark-mode .navbar-custom {
-      background-color: #1a1a1a !important;
-    }
-
+    .dark-mode .tag { background: #ff6f61; }
+    .dark-mode .navbar-custom { background-color: #1a1a1a !important; }
     .dark-mode .dark-toggle {
       background: #2c2c2c !important;
       color: #f5f5f5 !important;
     }
-
     .course-card {
       background: rgba(255, 255, 255, 0.85);
       backdrop-filter: blur(14px);
@@ -75,12 +59,10 @@
       box-shadow: 0 12px 32px rgba(0,0,0,0.1);
       transition: all 0.3s ease-in-out;
     }
-
     .course-card:hover {
       transform: translateY(-8px);
       box-shadow: 0 18px 36px rgba(0, 0, 0, 0.15);
     }
-
     .tag {
       background: #6c63ff;
       color: #fff;
@@ -91,31 +73,26 @@
       margin: 3px 4px 2px 0;
       display: inline-block;
     }
-
     .search-bar input {
       border-radius: 30px;
       padding: 0.8rem 1.5rem;
       box-shadow: 0 6px 18px rgba(0,0,0,0.05);
       border: 1px solid #ccc;
     }
-
     .filter-bar {
       text-align: center;
       margin-bottom: 2rem;
     }
-
     .filter-bar .btn {
       border-radius: 20px;
       margin: 0.3rem;
       font-size: 0.85rem;
       transition: all 0.2s ease-in-out;
     }
-
     .filter-bar .btn:hover {
       background-color: #6c63ff;
       color: #fff;
     }
-
     .floating-btn {
       position: fixed;
       bottom: 30px;
@@ -129,11 +106,9 @@
       transition: background 0.3s ease;
       z-index: 1000;
     }
-
     .floating-btn:hover {
       background-color: #4f48c4;
     }
-
     .dark-toggle {
       position: fixed;
       top: 90px;
@@ -148,13 +123,11 @@
       box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
       transition: all 0.3s ease;
     }
-
     .empty-state {
       text-align: center;
       padding: 4rem 1rem;
       color: #ddd;
     }
-
     .empty-state i {
       color: #adb5bd;
     }
@@ -200,10 +173,12 @@
       {% endif %}
     {% endwith %}
 
+    <!-- 🔍 Search Bar -->
     <form class="search-bar my-4">
       <input type="search" id="searchInput" class="form-control form-control-lg" placeholder="🔍 Search courses..." />
     </form>
 
+    <!-- 🏷️ Topic Filters -->
     <div class="filter-bar">
       {% set all_topics = [] %}
       {% for course in courses %}
@@ -218,6 +193,7 @@
       {% endfor %}
     </div>
 
+    <!-- 📚 Course List -->
     {% if courses %}
       <div class="row g-4" id="courseList">
         {% for course in courses %}

@@ -14,7 +14,6 @@ os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 ALLOWED_EXTENSIONS = {'pdf'}
 
-# SQLite database setup
 DB_FILE = 'syllabus.db'
 
 def init_db():
@@ -39,8 +38,7 @@ def init_db():
             pdf_filename TEXT
         )
     ''')
-    # Add default admin if not exists
-    c.execute('SELECT * FROM users WHERE username=?', ('pratham',))
+    c.execute('SELECT * FROM users WHERE username = ?', ('pratham',))
     if not c.fetchone():
         c.execute('INSERT INTO users (username, password, role) VALUES (?, ?, ?)', (
             'pratham',

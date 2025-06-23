@@ -19,6 +19,7 @@
       min-height: 100vh;
       overflow-x: hidden;
       position: relative;
+      background: #111;
     }
 
     #bg-video {
@@ -70,6 +71,7 @@
       border: none;
       box-shadow: 0 12px 30px rgba(255, 215, 0, 0.4);
       transition: all 0.3s ease-in-out;
+      text-decoration: none;
     }
 
     .btn-primary:hover {
@@ -155,18 +157,20 @@
 </head>
 <body>
 
-  <!-- Background Video -->
+  <!-- 🎥 Background Video -->
   <video id="bg-video" autoplay muted loop>
     <source src="{{ url_for('static', filename='videos/4440117-hd_1920_1080_25fps.mp4') }}" type="video/mp4">
     Your browser does not support HTML5 video.
   </video>
 
+  <!-- 🏠 Hero Section -->
   <main class="hero" role="main" aria-label="Welcome to Course Syllabus Manager">
     <h1>Course Syllabus Manager</h1>
     <p>Organize, preview, and manage your academic content with ease, elegance, and unmatched performance.</p>
     <a href="{{ url_for('index') }}" class="btn btn-primary" aria-label="View Courses">🚀 Get Started</a>
   </main>
 
+  <!-- ✨ Feature Highlights -->
   <section class="features" aria-label="Features and Benefits">
     <article class="feature-card" tabindex="0">
       <i class="fas fa-file-pdf feature-icon" aria-hidden="true"></i>
@@ -185,10 +189,13 @@
     </article>
   </section>
 
+  <!-- 🧾 Footer -->
   <footer>
     &copy; 2025 Course Syllabus Manager — Designed for modern academic workflows ✨
   </footer>
 
 </body>
+</html>
+
 </html>
 
